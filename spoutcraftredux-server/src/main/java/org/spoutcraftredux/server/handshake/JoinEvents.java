@@ -5,6 +5,7 @@ import org.spoutcraftredux.api.SpoutCraftRedux;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientMissingEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientReadyEvent;
 import org.spoutcraftredux.server.SpoutCraftReduxClientInfo;
+import org.spoutcraftredux.server.asset.CraftAssetRegistry;
 import org.spoutcraftredux.server.keybind.CraftKeyBindingRegistry;
 
 public final class JoinEvents {
@@ -17,6 +18,7 @@ public final class JoinEvents {
      * @param player the joining player
      */
     public static void fire(final CraftPlayer player) {
+        ((CraftAssetRegistry) SpoutCraftRedux.assets()).sendPack(player);
         if (SpoutCraftReduxClientInfo.of(player.getHandle().connection.connection).modded()) {
             ((CraftKeyBindingRegistry) SpoutCraftRedux.keyBindings()).sendTo(player);
             new SpoutCraftReduxClientReadyEvent(player).callEvent();

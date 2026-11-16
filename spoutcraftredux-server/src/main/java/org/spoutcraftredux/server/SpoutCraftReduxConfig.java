@@ -10,6 +10,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public final class SpoutCraftReduxConfig {
     public static int handshakeTimeoutTicks = 40;
     public static boolean skipHandshakeForVanillaBrand = true;
+    public static int resourcePackPort = 25580;
+    public static String resourcePackPublicUrl = "";
+    public static boolean resourcePackRequired;
+    public static String resourcePackPrompt = "";
 
     private static final String HEADER = """
         Main configuration file for SpoutCraft Redux.
@@ -36,6 +40,20 @@ public final class SpoutCraftReduxConfig {
 
         handshakeTimeoutTicks = Math.max(1, config.getInt("handshake.timeout-ticks"));
         skipHandshakeForVanillaBrand = config.getBoolean("handshake.skip-for-vanilla-brand");
+
+        config.addDefault("resource-pack.port", 25580);
+        config.setInlineComments("resource-pack.port", List.of("Port of the built-in web server that hands out the merged plugin resource pack."));
+        config.addDefault("resource-pack.public-url", "");
+        config.setInlineComments("resource-pack.public-url", List.of(
+            "Set this if players reach the pack through a proxy or another host, like https://pack.example.com. Empty uses the address players joined with."));
+        config.addDefault("resource-pack.required", false);
+        config.setInlineComments("resource-pack.required", List.of("Kick players who decline the pack."));
+        config.addDefault("resource-pack.prompt", "");
+        config.setInlineComments("resource-pack.prompt", List.of("Message shown when asking players to accept the pack. Empty uses Minecraft's default."));
+        resourcePackPort = config.getInt("resource-pack.port");
+        resourcePackPublicUrl = config.getString("resource-pack.public-url", "");
+        resourcePackRequired = config.getBoolean("resource-pack.required");
+        resourcePackPrompt = config.getString("resource-pack.prompt", "");
 
         config.save(file);
     }

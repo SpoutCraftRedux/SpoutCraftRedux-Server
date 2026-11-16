@@ -13,6 +13,7 @@ import org.spoutcraftredux.api.gui.ListWidget;
 import org.spoutcraftredux.api.gui.Slider;
 import org.spoutcraftredux.api.gui.TextAlign;
 import org.spoutcraftredux.api.gui.TextField;
+import org.spoutcraftredux.api.gui.Texture;
 import org.spoutcraftredux.api.gui.Widget;
 import org.spoutcraftredux.protocol.gui.WidgetSpec;
 import org.spoutcraftredux.protocol.gui.WidgetTypes;
@@ -70,6 +71,10 @@ public final class WidgetSpecs {
             case ItemWidget item -> {
                 properties.put("item", item.getItem().getKey().asString());
                 yield WidgetTypes.ITEM;
+            }
+            case Texture texture -> {
+                properties.put("asset", texture.getAsset().sha256());
+                yield WidgetTypes.TEXTURE;
             }
             case ListWidget list -> {
                 final List<String> titles = new ArrayList<>();
