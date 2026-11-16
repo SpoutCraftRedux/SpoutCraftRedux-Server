@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spoutcraftredux.api.SpoutCraftRedux;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
@@ -90,7 +91,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         screen.attach(
             new Texture(this.logo).setAnchor(WidgetAnchor.TOP_LEFT).setGeometry(5, 5, 64, 32),
             status,
-            new ItemWidget(Material.EMERALD).setAnchor(WidgetAnchor.TOP_CENTER).setGeometry(-8, 25, 16, 16),
+            new ItemWidget(ItemType.EMERALD).setAnchor(WidgetAnchor.TOP_CENTER).setGeometry(-8, 25, 16, 16),
             new Button(Component.text("Buy an emerald")).setAnchor(WidgetAnchor.CENTER_CENTER).setGeometry(-100, -60, 200, 20)
                 .onClick(player -> {
                     this.getSLF4JLogger().info("{} clicked the button", player.getName());

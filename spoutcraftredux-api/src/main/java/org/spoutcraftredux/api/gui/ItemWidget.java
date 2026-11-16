@@ -1,19 +1,19 @@
 package org.spoutcraftredux.api.gui;
 
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemType;
 
 /**
  * An item icon, 16 by 16 unless sized otherwise.
  */
 public final class ItemWidget extends Widget<ItemWidget> {
-    private Material item;
+    private ItemType item;
 
     /**
      * Creates an item icon.
      *
      * @param item the item to draw
      */
-    public ItemWidget(final Material item) {
+    public ItemWidget(final ItemType item) {
         this.item = item;
     }
 
@@ -22,7 +22,7 @@ public final class ItemWidget extends Widget<ItemWidget> {
      *
      * @return the item
      */
-    public Material getItem() {
+    public ItemType getItem() {
         return this.item;
     }
 
@@ -32,7 +32,7 @@ public final class ItemWidget extends Widget<ItemWidget> {
      * @param item the item to draw
      * @return this widget
      */
-    public ItemWidget setItem(final Material item) {
+    public ItemWidget setItem(final ItemType item) {
         this.item = item;
         this.changed();
         return this;
