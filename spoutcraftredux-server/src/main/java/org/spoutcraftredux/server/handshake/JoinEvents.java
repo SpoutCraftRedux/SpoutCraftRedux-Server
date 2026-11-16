@@ -9,7 +9,11 @@ public final class JoinEvents {
     private JoinEvents() {
     }
 
-    /** Called right before PlayerJoinEvent. */
+    /**
+     * Fires the ready or missing event. Called right before PlayerJoinEvent.
+     *
+     * @param player the joining player
+     */
     public static void fire(final CraftPlayer player) {
         if (SpoutCraftReduxClientInfo.of(player.getHandle().connection.connection).modded()) {
             new SpoutCraftReduxClientReadyEvent(player).callEvent();

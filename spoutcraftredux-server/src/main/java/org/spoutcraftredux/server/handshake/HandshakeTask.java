@@ -53,6 +53,8 @@ public final class HandshakeTask implements ConfigurationTask {
     /**
      * Handles a SpoutCraft Redux payload from the client.
      *
+     * @param listener the connection's configuration listener
+     * @param payload  the custom payload the client sent
      * @return true if the payload was a SpoutCraft Redux one and is consumed
      */
     public static boolean handlePayload(final ServerConfigurationPacketListenerImpl listener, final DiscardedPayload payload) {

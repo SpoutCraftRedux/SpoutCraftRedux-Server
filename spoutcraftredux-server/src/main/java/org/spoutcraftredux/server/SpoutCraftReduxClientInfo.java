@@ -5,7 +5,13 @@ import java.util.Set;
 import net.minecraft.network.Connection;
 import org.jspecify.annotations.Nullable;
 
-/** What the handshake learned about a connection. Stored on the Netty channel so it survives phase changes. */
+/**
+ * What the handshake learned about a connection. Stored on the Netty channel so it survives phase changes.
+ *
+ * @param protocol     the agreed protocol version, or 0 for vanilla clients
+ * @param capabilities the capabilities the client reported
+ * @param modVersion   the client mod version, or null for vanilla clients
+ */
 public record SpoutCraftReduxClientInfo(int protocol, Set<String> capabilities, @Nullable String modVersion) {
     public static final SpoutCraftReduxClientInfo VANILLA = new SpoutCraftReduxClientInfo(0, Set.of(), null);
     private static final AttributeKey<SpoutCraftReduxClientInfo> KEY = AttributeKey.valueOf("spoutcraftredux:client");

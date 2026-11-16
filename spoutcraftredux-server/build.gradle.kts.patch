@@ -35,6 +35,19 @@
      /*updatingMinecraft { // Purpur start - Rebrand - we don't need this
          //oldPaperCommit = "e5fe71723e2ffde7cc9fafc085ac3bb73e63175e"
      }*/ // Purpur end - Rebrand - we don't need this
+@@ -46,6 +_,12 @@
+     directoriesToSkipFile = layout.projectDirectory.file("../paper-server/.checkstyle/ignored_directories.txt")
+ }
+ 
++// SpoutCraft Redux start - the protocol submodule follows its own style rules
++tasks.named<Checkstyle>("checkstyleMain") {
++    exclude("org/spoutcraftredux/protocol/**")
++}
++// SpoutCraft Redux end
++
+ tasks.named<io.papermc.paperweight.checkstyle.tasks.MergeCheckstyleConfigs>("mergeCheckstyleConfigs") {
+     overrideConfigFile.set(layout.projectDirectory.file("../paper-server/.checkstyle/checkstyle.xml"))
+ }
 @@ -114,10 +_,15 @@
      main {
          java { srcDir("../paper-server/src/main/java") }

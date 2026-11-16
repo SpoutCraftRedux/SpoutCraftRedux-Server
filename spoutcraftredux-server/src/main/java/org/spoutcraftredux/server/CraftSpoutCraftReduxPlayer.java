@@ -4,10 +4,8 @@ import java.util.Optional;
 import java.util.Set;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NullMarked;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
 
-@NullMarked
 public final class CraftSpoutCraftReduxPlayer implements SpoutCraftReduxPlayer {
     private final CraftPlayer player;
 
