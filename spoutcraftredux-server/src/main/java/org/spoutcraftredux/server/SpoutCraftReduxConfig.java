@@ -14,7 +14,11 @@ public final class SpoutCraftReduxConfig {
     public static String resourcePackPublicUrl = "";
     public static boolean resourcePackRequired;
     public static String resourcePackPrompt = "";
+    public static String missingClientMessage = "";
 
+    private static final String DEFAULT_MISSING_CLIENT_MESSAGE = "<gold>This server uses <yellow>SpoutCraft Redux</yellow>. "
+        + "Get the client at <click:open_url:'https://spoutcraftredux.org/downloads'><aqua><underlined>spoutcraftredux.org</underlined></aqua></click>"
+        + " for the full experience.";
     private static final String HEADER = """
         Main configuration file for SpoutCraft Redux.
         Website: https://spoutcraftredux.org
@@ -50,6 +54,11 @@ public final class SpoutCraftReduxConfig {
         config.setInlineComments("resource-pack.required", List.of("Kick players who decline the pack."));
         config.addDefault("resource-pack.prompt", "");
         config.setInlineComments("resource-pack.prompt", List.of("Message shown when asking players to accept the pack. Empty uses Minecraft's default."));
+        config.addDefault("missing-client.message", DEFAULT_MISSING_CLIENT_MESSAGE);
+        config.setInlineComments("missing-client.message", List.of(
+            "Chat message for players who join without the SpoutCraft Redux client, in MiniMessage format. Empty sends nothing."));
+        missingClientMessage = config.getString("missing-client.message", "");
+
         resourcePackPort = config.getInt("resource-pack.port");
         resourcePackPublicUrl = config.getString("resource-pack.public-url", "");
         resourcePackRequired = config.getBoolean("resource-pack.required");
