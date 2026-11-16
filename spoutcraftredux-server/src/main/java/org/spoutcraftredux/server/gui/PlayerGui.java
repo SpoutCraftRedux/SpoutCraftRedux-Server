@@ -1,6 +1,8 @@
 package org.spoutcraftredux.server.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.jspecify.annotations.Nullable;
@@ -11,12 +13,14 @@ import org.spoutcraftredux.api.gui.ListWidget;
 import org.spoutcraftredux.api.gui.PopupScreen;
 import org.spoutcraftredux.api.gui.Slider;
 import org.spoutcraftredux.api.gui.TextField;
+import org.spoutcraftredux.api.gui.VanillaHudElement;
 import org.spoutcraftredux.api.gui.Widget;
 import org.spoutcraftredux.api.gui.WidgetContainer;
 import org.spoutcraftredux.protocol.Capabilities;
 import org.spoutcraftredux.protocol.message.ControlEvent;
 import org.spoutcraftredux.protocol.message.ScreenClose;
 import org.spoutcraftredux.protocol.message.ScreenOpen;
+import org.spoutcraftredux.protocol.message.VanillaHud;
 import org.spoutcraftredux.protocol.message.WidgetRemove;
 import org.spoutcraftredux.protocol.message.WidgetUpdate;
 import org.spoutcraftredux.server.network.Payloads;
@@ -64,6 +68,13 @@ public final class PlayerGui {
             }
 
             @Override
+            public void vanillaChanged() {
+                if (id == WidgetUpdate.HUD) {
+                    PlayerGui.this.sendVanillaHud();
+                }
+            }
+
+            @Override
             public void close() {
                 if (PlayerGui.this.screen == container) {
                     PlayerGui.this.closeScreen();
@@ -89,6 +100,22 @@ public final class PlayerGui {
             Payloads.send(this.handle(), WidgetUpdate.CHANNEL,
                 new WidgetUpdate(WidgetUpdate.HUD, this.hud.getWidgets().stream().map(WidgetSpecs::of).toList()).encode());
         }
+    }
+
+    private void sendVanillaHud() {
+        if (!this.supports(Capabilities.HUD)) {
+            return;
+        }
+        final List<VanillaHud.Element> elements = new ArrayList<>();
+        for (final VanillaHudElement element : VanillaHudElement.values()) {
+            final boolean visible = this.hud.isVanillaVisible(element);
+            final int x = this.hud.getVanillaOffsetX(element);
+            final int y = this.hud.getVanillaOffsetY(element);
+            if (!visible || x != 0 || y != 0) {
+                elements.add(new VanillaHud.Element(element.name().toLowerCase(Locale.ROOT), visible, x, y));
+            }
+        }
+        Payloads.send(this.handle(), VanillaHud.CHANNEL, new VanillaHud(elements).encode());
     }
 
     /**

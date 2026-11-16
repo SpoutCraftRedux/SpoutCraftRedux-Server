@@ -39,6 +39,12 @@ public abstract class WidgetContainer<C extends WidgetContainer<C>> {
          */
         default void close() {
         }
+
+        /**
+         * Sends the vanilla HUD settings, for the HUD.
+         */
+        default void vanillaChanged() {
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ import org.spoutcraftredux.api.gui.PopupScreen;
 import org.spoutcraftredux.api.gui.Slider;
 import org.spoutcraftredux.api.gui.TextAlign;
 import org.spoutcraftredux.api.gui.TextField;
+import org.spoutcraftredux.api.gui.VanillaHudElement;
 import org.spoutcraftredux.api.gui.Texture;
 import org.spoutcraftredux.api.gui.WidgetAnchor;
 import org.spoutcraftredux.api.keybind.KeyBinding;
@@ -102,6 +103,10 @@ public class TestPlugin extends JavaPlugin implements Listener {
             new TextField().setPlaceholder(Component.text("Your name")).setAnchor(WidgetAnchor.CENTER_CENTER).setGeometry(-100, -8, 200, 20)
                 .onSubmit((player, text) -> this.getSLF4JLogger().info("{} submitted '{}'", player.getName(), text)),
             slider,
+            new CheckBox(Component.text("Hide the survival HUD")).setAnchor(WidgetAnchor.BOTTOM_LEFT).setGeometry(5, -50, 150, 20)
+                .onChange((player, checked) -> player.spoutCraftRedux().hud().setSurvivalHudVisible(!checked)),
+            new CheckBox(Component.text("Raise the hotbar")).setAnchor(WidgetAnchor.BOTTOM_LEFT).setGeometry(5, -25, 150, 20)
+                .onChange((player, checked) -> player.spoutCraftRedux().hud().setVanillaOffset(VanillaHudElement.HOTBAR, 0, checked ? -40 : 0)),
             new ListWidget().setRows(List.of(
                     new ListWidget.Row(Component.text("Swords"), Component.text("Sharp things")),
                     new ListWidget.Row(Component.text("Shields"), Component.text("Blocky things")),
