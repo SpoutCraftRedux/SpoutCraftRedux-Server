@@ -76,11 +76,19 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         // One of each custom item
-        for (final Key id : List.of(TestPluginBootstrap.RUBY, TestPluginBootstrap.RUBY_WAND, TestPluginBootstrap.SNACK)) {
+        for (final Key id : List.of(TestPluginBootstrap.RUBY, TestPluginBootstrap.RUBY_WAND, TestPluginBootstrap.SNACK,
+            TestPluginBootstrap.RUBY_SWORD, TestPluginBootstrap.RUBY_HELMET, TestPluginBootstrap.PARTY_HAT)) {
             final CustomItem item = SpoutCraftRedux.content().item(id);
             if (item != null && java.util.Arrays.stream(player.getInventory().getContents())
                 .noneMatch(stack -> stack != null && SpoutCraftRedux.content().item(stack) == item)) {
                 player.getInventory().addItem(SpoutCraftRedux.content().createStack(item, id.equals(TestPluginBootstrap.SNACK) ? 8 : 1));
+            }
+        }
+        for (final ItemStack stack : player.getInventory().getContents()) {
+            final CustomItem item = stack == null ? null : SpoutCraftRedux.content().item(stack);
+            if (item != null) {
+                this.getSLF4JLogger().info("{}: type {}, empty {}, max stack {}, max damage {}", item.id(), stack.getType(), stack.isEmpty(),
+                    stack.getMaxStackSize(), stack.getType().getMaxDurability());
             }
         }
         // A small HUD in the top left: a label over a mana-style bar
