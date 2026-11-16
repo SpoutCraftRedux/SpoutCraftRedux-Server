@@ -29,7 +29,30 @@ You need Java 25. paperweight applies the patches with Git, so the folder has to
 ./gradlew createPaperclipJar
 ```
 
-The server jar ends up in `spoutcraftredux-server/build/libs/`.
+The server jar ends up in `spoutcraftredux-server/build/libs/`. Local builds are versioned `26.3.local-SNAPSHOT`. Set `BUILD_NUMBER=<n>` to get the CI version, `26.3.build.<n>-stable`.
+
+## CI and publishing
+
+`.github/workflows/build.yml` builds every push and pull request. A push to `main` also:
+
+- publishes `spoutcraftredux-api` to https://repo.spoutcraftredux.org/snapshots as `26.3.build.<run number>-stable`
+- uploads the paperclip jar to https://api.spoutcraftredux.org as build `<run number>` of project `spoutcraftredux`, version `26.3`
+
+The workflow uses these repository secrets:
+
+| Secret | Used for |
+|---|---|
+| `REPO_USERNAME`, `REPO_PASSWORD` | Reposilite token that can write to `releases` and `snapshots` |
+| `DOWNLOADS_API_TOKEN` | Upload token for api.spoutcraftredux.org |
+| `DOWNLOADS_API_TOKEN_STAGING` | Upload token for staging-api.spoutcraftredux.org (not used by CI yet) |
+
+To publish the API by hand:
+
+```
+ORG_GRADLE_PROJECT_spoutcraftreduxUsername=<user> \
+ORG_GRADLE_PROJECT_spoutcraftreduxPassword=<token> \
+./gradlew :spoutcraftredux-api:publishAllPublicationsToSpoutcraftreduxRepository
+```
 
 ## Running a dev server
 
