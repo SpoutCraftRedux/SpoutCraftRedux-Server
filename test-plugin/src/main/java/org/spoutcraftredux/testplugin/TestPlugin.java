@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spoutcraftredux.api.SpoutCraftRedux;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
+import org.spoutcraftredux.api.asset.Asset;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientMissingEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientReadyEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxKeyBindingEvent;
@@ -26,14 +27,24 @@ import org.spoutcraftredux.api.gui.PopupScreen;
 import org.spoutcraftredux.api.gui.Slider;
 import org.spoutcraftredux.api.gui.TextAlign;
 import org.spoutcraftredux.api.gui.TextField;
+import org.spoutcraftredux.api.gui.Texture;
 import org.spoutcraftredux.api.gui.WidgetAnchor;
 import org.spoutcraftredux.api.keybind.KeyBinding;
 
 public class TestPlugin extends JavaPlugin implements Listener {
 
+    private Asset logo;
+
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
+        this.logo = SpoutCraftRedux.assets().registerImage(this, Key.key("spoutcraftredux_test", "logo"), "images/logo.png");
+        try {
+            // Turns the diamond item into a red gem, for every player
+            SpoutCraftRedux.assets().addResourcePack(this, "resourcepack");
+        } catch (final java.io.IOException e) {
+            this.getSLF4JLogger().error("Could not add the test resource pack", e);
+        }
         SpoutCraftRedux.keyBindings().register(this, KeyBinding.of(
             Key.key("spoutcraftredux_test", "hello"), Component.text("Open the test screen"), "key.keyboard.h"));
     }
@@ -77,6 +88,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
             .setGeometry(-100, 20, 200, 20).setPosition(0.5f);
         slider.onChange((player, position) -> slider.setText(Component.text("Volume: " + Math.round(position * 100) + "%")));
         screen.attach(
+            new Texture(this.logo).setAnchor(WidgetAnchor.TOP_LEFT).setGeometry(5, 5, 64, 32),
             status,
             new ItemWidget(Material.EMERALD).setAnchor(WidgetAnchor.TOP_CENTER).setGeometry(-8, 25, 16, 16),
             new Button(Component.text("Buy an emerald")).setAnchor(WidgetAnchor.CENTER_CENTER).setGeometry(-100, -60, 200, 20)
