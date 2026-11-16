@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: GideonWhite1029 <gideonwhite1029@gmail.com>
+Date: Fri, 11 Apr 2025 10:35:11 +0300
+Subject: [PATCH] Rebrand
+
+
+diff --git a/src/main/java/io/papermc/paper/ServerBuildInfo.java b/src/main/java/io/papermc/paper/ServerBuildInfo.java
+index d3b58c479f51b3cf3be04e1f5f08148b97ae8290..9acae72782c39e2cbccff6fb62c74f0e665279af 100644
+--- a/src/main/java/io/papermc/paper/ServerBuildInfo.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfo.java
+@@ -24,6 +24,12 @@ public interface ServerBuildInfo {
+      */
+     Key BRAND_PURPUR_ID = Key.key("purpurmc", "purpur");
+     // Purpur end
++    // SpoutCraft Redux start
++    /**
++     * The brand id for SpoutCraft Redux.
++     */
++    Key BRAND_SPOUTCRAFTREDUX_ID = Key.key("spoutcraftredux", "spoutcraftredux");
++    // SpoutCraft Redux end
+     /**
+      * Gets the {@code ServerBuildInfo}.
+      *
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 29edd88cb1c4055f90fd05c438263d2a6b619cbe..fa603f228fe842f49a91d560c1a518809dfe9570 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2522,6 +2522,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+         }
+         // Purpur end
+ 
++        // SpoutCraft Redux start
++        @NotNull
++        public org.bukkit.configuration.file.YamlConfiguration getSpoutCraftReduxConfig() {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++        // SpoutCraft Redux end
++
+         /**
+          * Sends the component to the player
+          *
