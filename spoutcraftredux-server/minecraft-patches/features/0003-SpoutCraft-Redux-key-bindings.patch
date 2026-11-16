@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 03:56:03 +0000
+Subject: [PATCH] SpoutCraft Redux key bindings
+
+
+diff --git a/net/minecraft/server/network/ServerCommonPacketListenerImpl.java b/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
+index 048bbab91c4614f8935797b389594c1bdd4542b0..c645a57cb25519aaadbc8bf8197a82e6ada9ff4e 100644
+--- a/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
+@@ -199,6 +199,12 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
+                 this.clientBrand = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.wrappedBuffer(data)).readUtf(256);
+             }
+ 
++            // SpoutCraft Redux start - Key bindings
++            if (this instanceof ServerGamePacketListenerImpl game && org.spoutcraftredux.server.network.GamePayloads.handle(game.player, identifier, data)) {
++                return;
++            }
++            // SpoutCraft Redux end - Key bindings
++
+             this.cserver.getMessenger().dispatchIncomingMessage(paperConnection(), identifier.toString(), data);
+         } catch (final Exception e) {
+             LOGGER.error("Couldn't handle custom payload on channel {}", identifier, e);

@@ -1,9 +1,11 @@
 package org.spoutcraftredux.server.handshake;
 
 import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.spoutcraftredux.api.SpoutCraftRedux;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientMissingEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientReadyEvent;
 import org.spoutcraftredux.server.SpoutCraftReduxClientInfo;
+import org.spoutcraftredux.server.keybind.CraftKeyBindingRegistry;
 
 public final class JoinEvents {
     private JoinEvents() {
@@ -16,6 +18,7 @@ public final class JoinEvents {
      */
     public static void fire(final CraftPlayer player) {
         if (SpoutCraftReduxClientInfo.of(player.getHandle().connection.connection).modded()) {
+            ((CraftKeyBindingRegistry) SpoutCraftRedux.keyBindings()).sendTo(player);
             new SpoutCraftReduxClientReadyEvent(player).callEvent();
         } else {
             new SpoutCraftReduxClientMissingEvent(player).callEvent();

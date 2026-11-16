@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Set;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
+import org.spoutcraftredux.protocol.Capabilities;
 import org.spoutcraftredux.server.command.SpoutCraftReduxCommand;
 
 /** Entry point called from the server bootstrap. */
@@ -12,7 +13,7 @@ public final class SpoutCraftReduxServer {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final File CONFIG_FILE = new File("spoutcraftredux.yml");
     /** Features this server build implements; grows as phases land. */
-    public static final Set<String> SERVER_CAPABILITIES = Set.of();
+    public static final Set<String> SERVER_CAPABILITIES = Set.of(Capabilities.NOTIFICATION, Capabilities.KEYBIND);
 
     private SpoutCraftReduxServer() {
     }
