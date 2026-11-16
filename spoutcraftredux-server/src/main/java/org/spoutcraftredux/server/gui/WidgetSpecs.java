@@ -3,8 +3,11 @@ package org.spoutcraftredux.server.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import org.spoutcraftredux.api.asset.Asset;
 import org.spoutcraftredux.api.gui.Button;
+import org.spoutcraftredux.api.gui.ButtonState;
 import org.spoutcraftredux.api.gui.CheckBox;
 import org.spoutcraftredux.api.gui.Gradient;
 import org.spoutcraftredux.api.gui.ItemWidget;
@@ -45,6 +48,7 @@ public final class WidgetSpecs {
             case Button button -> {
                 properties.put("text", Payloads.json(button.getText()));
                 properties.put("align", align(button.getAlign()));
+                buttonStyle(button, properties);
                 yield WidgetTypes.BUTTON;
             }
             case CheckBox box -> {
@@ -97,5 +101,29 @@ public final class WidgetSpecs {
 
     private static int align(final TextAlign align) {
         return align.ordinal();
+    }
+
+    private static void buttonStyle(final Button button, final Map<String, Object> properties) {
+        for (final ButtonState state : ButtonState.values()) {
+            final String prefix = state == ButtonState.NORMAL ? "" : state.name().toLowerCase(Locale.ROOT) + "_";
+            final Asset texture = button.getTexture(state);
+            if (texture != null) {
+                properties.put(prefix + "texture", texture.sha256());
+            }
+            final Integer background = button.getBackground(state);
+            if (background != null) {
+                properties.put(prefix + "background", background);
+            }
+            final Integer color = button.getTextColor(state);
+            if (color != null) {
+                properties.put(prefix + "color", color);
+            }
+        }
+        if (button.getTextureBorder() > 0) {
+            properties.put("border", button.getTextureBorder());
+        }
+        if (!button.hasTextShadow()) {
+            properties.put("shadow", false);
+        }
     }
 }
