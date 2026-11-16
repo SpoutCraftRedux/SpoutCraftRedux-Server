@@ -80,6 +80,15 @@ subprojects {
         maven(paperMavenPublicUrl)
     }
 
+    extensions.configure<PublishingExtension> {
+        repositories {
+            maven("https://repo.spoutcraftredux.org/snapshots") {
+                name = "spoutcraftredux"
+                credentials(PasswordCredentials::class)
+            }
+        }
+    }
+
     tasks.withType<AbstractArchiveTask>().configureEach {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
