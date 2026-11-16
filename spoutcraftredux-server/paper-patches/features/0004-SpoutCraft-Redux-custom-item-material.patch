@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 07:12:27 +0000
+Subject: [PATCH] SpoutCraft Redux custom item material
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+index a9c22da00399f221c921826806e18aed5d449381..022a1da2741a5ec8ef67456a42fde2efefe258f8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -1023,7 +1023,7 @@ public final class CraftItemStack extends ItemStack {
+     }
+ 
+     private boolean isBroke(int damage) {
+-        if (damage > getType().getMaxDurability()) {
++        if (damage > (this.handle != null ? this.handle.getMaxDamage() : getType().getMaxDurability())) { // SpoutCraft Redux - Custom items: use the stack's own max damage
+             if (getAmount() > 0) {
+                 // ensure it "breaks"
+                 setAmount(0);
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 2c6137746c3bb545967c73de9311eb7d9cb80d10..c0fd14f05e3247771671d2f1478f18d510e672fa 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -138,13 +138,17 @@ public final class CraftMagicNumbers implements UnsafeValues {
+     private static final Map<Material, Block> MATERIAL_BLOCK = new EnumMap<>(Material.class);
+ 
+     static {
++        // SpoutCraft Redux start - Custom items: only vanilla ids map to a vanilla material by name
+         for (Block block : BuiltInRegistries.BLOCK) {
+-            BLOCK_MATERIAL.put(block, Material.getMaterial(BuiltInRegistries.BLOCK.getKey(block).getPath().toUpperCase(Locale.ROOT)));
++            Identifier key = BuiltInRegistries.BLOCK.getKey(block);
++            BLOCK_MATERIAL.put(block, key.getNamespace().equals(Identifier.DEFAULT_NAMESPACE) ? Material.getMaterial(key.getPath().toUpperCase(Locale.ROOT)) : null);
+         }
+ 
+         for (Item item : BuiltInRegistries.ITEM) {
+-            ITEM_MATERIAL.put(item, Material.getMaterial(BuiltInRegistries.ITEM.getKey(item).getPath().toUpperCase(Locale.ROOT)));
++            Identifier key = BuiltInRegistries.ITEM.getKey(item);
++            ITEM_MATERIAL.put(item, key.getNamespace().equals(Identifier.DEFAULT_NAMESPACE) ? Material.getMaterial(key.getPath().toUpperCase(Locale.ROOT)) : Material.SPOUTCRAFTREDUX_CUSTOM_ITEM);
+         }
++        // SpoutCraft Redux end - Custom items
+ 
+         for (Material material : Material.values()) {
+             if (material.isLegacy()) {

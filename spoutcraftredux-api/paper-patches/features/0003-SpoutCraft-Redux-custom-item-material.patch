@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 07:12:27 +0000
+Subject: [PATCH] SpoutCraft Redux custom item material
+
+
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index 53da2ebe16f5d6a0312dd034acf32ba15324eb79..82537e8e66a54b6095355ab698098dca7ce408de 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -1966,6 +1966,14 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+     ZOMBIE_HEAD(-1, Skull.class),
+     ZOMBIE_WALL_HEAD(-1, WallSkull.class),
+     // End generate - Blocks
++    // SpoutCraft Redux start - Custom items
++    /**
++     * The type of every SpoutCraft Redux custom item. It has no static item properties; read them from the
++     * {@link org.bukkit.inventory.ItemStack} itself, and use the SpoutCraft Redux content API to tell custom items
++     * apart. A stack can't be created from this material.
++     */
++    SPOUTCRAFTREDUX_CUSTOM_ITEM(-1),
++    // SpoutCraft Redux end - Custom items
+     // ----- Legacy Separator -----
+     @Deprecated(since = "1.13", forRemoval = true)
+     LEGACY_AIR(0),

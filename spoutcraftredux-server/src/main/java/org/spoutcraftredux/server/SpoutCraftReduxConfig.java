@@ -3,6 +3,7 @@ package org.spoutcraftredux.server;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -34,6 +35,7 @@ public final class SpoutCraftReduxConfig {
         }
         config.options().setHeader(HEADER.lines().toList());
         config.options().copyDefaults(true);
+        // Read with getString(path) so first-start values come from the defaults; getString(path, def) skips them
 
         config.addDefault("handshake.timeout-ticks", 40);
         config.setInlineComments("handshake.timeout-ticks", List.of(
@@ -57,12 +59,12 @@ public final class SpoutCraftReduxConfig {
         config.addDefault("missing-client.message", DEFAULT_MISSING_CLIENT_MESSAGE);
         config.setInlineComments("missing-client.message", List.of(
             "Chat message for players who join without the SpoutCraft Redux client, in MiniMessage format. Empty sends nothing."));
-        missingClientMessage = config.getString("missing-client.message", "");
+        missingClientMessage = Objects.requireNonNullElse(config.getString("missing-client.message"), "");
 
         resourcePackPort = config.getInt("resource-pack.port");
-        resourcePackPublicUrl = config.getString("resource-pack.public-url", "");
+        resourcePackPublicUrl = Objects.requireNonNullElse(config.getString("resource-pack.public-url"), "");
         resourcePackRequired = config.getBoolean("resource-pack.required");
-        resourcePackPrompt = config.getString("resource-pack.prompt", "");
+        resourcePackPrompt = Objects.requireNonNullElse(config.getString("resource-pack.prompt"), "");
 
         config.save(file);
     }
