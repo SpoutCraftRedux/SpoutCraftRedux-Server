@@ -16,10 +16,13 @@ public final class SpoutCraftReduxConfig {
     public static boolean resourcePackRequired;
     public static String resourcePackPrompt = "";
     public static String missingClientMessage = "";
+    public static String missingClientKickMessage = "";
 
     private static final String DEFAULT_MISSING_CLIENT_MESSAGE = "<gold>This server uses <yellow>SpoutCraft Redux</yellow>. "
         + "Get the client at <click:open_url:'https://spoutcraftredux.org/downloads'><aqua><underlined>spoutcraftredux.org</underlined></aqua></click>"
         + " for the full experience.";
+    private static final String DEFAULT_MISSING_CLIENT_KICK_MESSAGE = "<gold>This server needs <yellow>SpoutCraft Redux</yellow>.</gold>"
+        + "<newline><gray>Get the client at <aqua>spoutcraftredux.org/downloads</aqua>";
     private static final String HEADER = """
         Main configuration file for SpoutCraft Redux.
         Website: https://spoutcraftredux.org
@@ -60,6 +63,10 @@ public final class SpoutCraftReduxConfig {
         config.setInlineComments("missing-client.message", List.of(
             "Chat message for players who join without the SpoutCraft Redux client, in MiniMessage format. Empty sends nothing."));
         missingClientMessage = Objects.requireNonNullElse(config.getString("missing-client.message"), "");
+        config.addDefault("missing-client.kick-message", DEFAULT_MISSING_CLIENT_KICK_MESSAGE);
+        config.setInlineComments("missing-client.kick-message", List.of(
+            "Disconnect message for players without the client when a plugin adds custom items or blocks, which they can't play without. MiniMessage format."));
+        missingClientKickMessage = Objects.requireNonNullElse(config.getString("missing-client.kick-message"), "");
 
         resourcePackPort = config.getInt("resource-pack.port");
         resourcePackPublicUrl = Objects.requireNonNullElse(config.getString("resource-pack.public-url"), "");

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * The server's custom content. Content is registered from a plugin bootstrapper, before the server's registries
  * freeze; registering later throws. Once any content is registered, players without the SpoutCraft Redux client are
- * disconnected while joining with the {@code missing-client.message}.
+ * disconnected while joining with the {@code missing-client.kick-message}.
  */
 public interface ContentRegistry {
 

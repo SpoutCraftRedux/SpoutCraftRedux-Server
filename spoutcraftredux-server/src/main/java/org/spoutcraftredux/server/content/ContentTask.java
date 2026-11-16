@@ -73,7 +73,7 @@ public final class ContentTask implements ConfigurationTask {
     }
 
     private static Component missingClientMessage() {
-        final String template = SpoutCraftReduxConfig.missingClientMessage;
+        final String template = SpoutCraftReduxConfig.missingClientKickMessage;
         return template.isBlank()
             ? Component.text("This server needs the SpoutCraft Redux client.")
             : MiniMessage.miniMessage().deserialize(template);
