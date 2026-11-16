@@ -100,7 +100,7 @@ public final class ContentTask implements ConfigurationTask {
                 disconnect(listener, Component.text("Your client could not load this server's custom content: " + ack.error()));
                 return true;
             }
-        } catch (ProtocolException e) {
+        } catch (ProtocolException _) {
             disconnect(listener, Component.text("Bad custom content answer"));
             return true;
         }

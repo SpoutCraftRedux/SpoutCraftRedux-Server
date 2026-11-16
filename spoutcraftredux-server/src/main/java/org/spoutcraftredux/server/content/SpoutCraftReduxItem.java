@@ -1,27 +1,28 @@
 package org.spoutcraftredux.server.content;
 
 import io.papermc.paper.adventure.PaperAdventure;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAssets;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
 import org.bukkit.craftbukkit.block.CraftBlock;
@@ -48,7 +49,7 @@ public final class SpoutCraftReduxItem extends Item {
         final ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Identifier.parse(definition.id().asString()));
         final SpoutCraftReduxItem item = new SpoutCraftReduxItem(definition, properties(key, definition(definition)));
         // Runs after the defaults Item adds, so the name and model win
-        final net.minecraft.network.chat.Component name = PaperAdventure.asVanilla(definition.name());
+        final Component name = PaperAdventure.asVanilla(definition.name());
         final Identifier model = Identifier.parse(definition.model().asString());
         BuiltInRegistries.DATA_COMPONENT_INITIALIZERS.add(key, (components, context, k) ->
             components.set(DataComponents.ITEM_NAME, name).set(DataComponents.ITEM_MODEL, model));

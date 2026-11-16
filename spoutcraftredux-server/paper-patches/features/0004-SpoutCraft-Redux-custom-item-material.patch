@@ -41,3 +41,18 @@ index 2c6137746c3bb545967c73de9311eb7d9cb80d10..c0fd14f05e3247771671d2f1478f18d5
  
          for (Material material : Material.values()) {
              if (material.isLegacy()) {
+diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
+index f1f98eb2efd5f28223d203253efc615bfd100105..4b8772c8df2bbe7ccea53a68e3f15a4a41b480b2 100644
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
+@@ -185,6 +185,10 @@ public class LegacyTest {
+             Material.LEGACY_CAKE, Material.LEGACY_BED, Material.LEGACY_DIODE, Material.LEGACY_NETHER_STALK, Material.LEGACY_BREWING_STAND_ITEM, Material.LEGACY_CAULDRON_ITEM, Material.LEGACY_REDSTONE_COMPARATOR, Material.LEGACY_SPRUCE_DOOR_ITEM,
+             Material.LEGACY_BIRCH_DOOR_ITEM, Material.LEGACY_JUNGLE_DOOR_ITEM, Material.LEGACY_ACACIA_DOOR_ITEM, Material.LEGACY_DARK_OAK_DOOR_ITEM, Material.LEGACY_STATIONARY_LAVA, Material.LEGACY_STATIONARY_WATER));
+ 
++    {
++        this.INVALIDATED_MATERIALS.add(Material.SPOUTCRAFTREDUX_CUSTOM_ITEM); // SpoutCraft Redux - Custom items have no legacy material
++    }
++
+     @Test
+     public void toLegacyMaterial() {
+         for (Material material : Material.values()) {
