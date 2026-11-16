@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 00:46:17 +0000
+Subject: [PATCH] SpoutCraft Redux handshake
+
+
+diff --git a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
+index 6baa9d2a8af7901d47964e6d7ad53ea7963ceeef..1c69471192af60ef5dfb8ea8abc2d063966c2961 100644
+--- a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
+@@ -120,6 +120,7 @@ public class ServerConfigurationPacketListenerImpl extends ServerCommonPacketLis
+         this.send(new ClientboundUpdateEnabledFeaturesPacket(FeatureFlags.REGISTRY.toNames(this.server.getWorldData().enabledFeatures())));
+         this.synchronizeRegistriesTask = new SynchronizeRegistriesTask(knownPacks, registries);
+         this.configurationTasks.add(this.synchronizeRegistriesTask);
++        this.configurationTasks.add(new org.spoutcraftredux.server.handshake.HandshakeTask(this)); // SpoutCraft Redux - Handshake
+         this.addOptionalTasks();
+         this.configurationTasks.add(new io.papermc.paper.connection.PaperConfigurationTask(this)); // Paper
+         this.returnToWorld();
+@@ -284,6 +285,14 @@ public class ServerConfigurationPacketListenerImpl extends ServerCommonPacketLis
+ 
+     @Override
+     public void handleCustomPayload(net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket packet) {
++        // SpoutCraft Redux start - Handshake
++        if (packet.payload() instanceof net.minecraft.network.protocol.common.custom.DiscardedPayload payload) {
++            PacketUtils.ensureRunningOnSameThread(packet, this, this.server.packetProcessor());
++            if (org.spoutcraftredux.server.handshake.HandshakeTask.handlePayload(this, payload)) {
++                return;
++            }
++        }
++        // SpoutCraft Redux end - Handshake
+         super.handleCustomPayload(packet);
+     }
+ 
+diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
+index 48eb875b7d1a8f9206065d58040d438e3110bc10..0ad8753a854bab92cce0ef78f02d0dae62ee3bd8 100644
+--- a/net/minecraft/server/players/PlayerList.java
++++ b/net/minecraft/server/players/PlayerList.java
+@@ -241,6 +241,7 @@ public abstract class PlayerList {
+         // Ensure that player inventory is populated with its viewer
+         player.containerMenu.transferTo(player.containerMenu, bukkitPlayer);
+ 
++        org.spoutcraftredux.server.handshake.JoinEvents.fire(bukkitPlayer); // SpoutCraft Redux - Handshake
+         org.bukkit.event.player.PlayerJoinEvent playerJoinEvent = new org.bukkit.event.player.PlayerJoinEvent(bukkitPlayer, io.papermc.paper.adventure.PaperAdventure.asAdventure(component)); // Paper - Adventure
+         this.cserver.getPluginManager().callEvent(playerJoinEvent);
+ 

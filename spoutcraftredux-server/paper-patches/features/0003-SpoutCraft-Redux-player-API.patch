@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 00:46:24 +0000
+Subject: [PATCH] SpoutCraft Redux player API
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index fb1d7944202f10211a0d2d4cad2ff5e43430ac57..bf23cbee3125cccb5ab6e79a4e8b15ee74f2feda 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1007,6 +1007,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
+     }
+     // Purpur end - Purpur client support
+ 
++    // SpoutCraft Redux start - SpoutCraft Redux player API
++    private final org.spoutcraftredux.api.SpoutCraftReduxPlayer spoutCraftRedux = new org.spoutcraftredux.server.CraftSpoutCraftReduxPlayer(this);
++
++    @Override
++    public org.spoutcraftredux.api.SpoutCraftReduxPlayer spoutCraftRedux() {
++        return this.spoutCraftRedux;
++    }
++    // SpoutCraft Redux end - SpoutCraft Redux player API
++
+     // Purpur start - AFK API
+     @Override
+     public boolean isAfk() {
