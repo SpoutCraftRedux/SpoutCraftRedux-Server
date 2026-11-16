@@ -60,6 +60,13 @@ public interface SpoutCraftReduxPlayer {
     Optional<String> modVersion();
 
     /**
+     * Gets the player's movement multipliers.
+     *
+     * @return the movement multipliers
+     */
+    MovementModifiers movement();
+
+    /**
      * Shows a notification popup for 7.5 seconds.
      * <p>
      * Players without the SpoutCraft Redux client see the title and message in the action bar instead.

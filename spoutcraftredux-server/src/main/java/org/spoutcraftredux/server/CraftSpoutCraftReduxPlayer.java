@@ -9,6 +9,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.spoutcraftredux.api.MovementModifiers;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
 import org.spoutcraftredux.protocol.Capabilities;
 import org.spoutcraftredux.protocol.message.Notification;
@@ -16,9 +17,16 @@ import org.spoutcraftredux.server.network.Payloads;
 
 public final class CraftSpoutCraftReduxPlayer implements SpoutCraftReduxPlayer {
     private final CraftPlayer player;
+    private final CraftMovementModifiers movement;
 
     public CraftSpoutCraftReduxPlayer(final CraftPlayer player) {
         this.player = player;
+        this.movement = new CraftMovementModifiers(player);
+    }
+
+    @Override
+    public MovementModifiers movement() {
+        return this.movement;
     }
 
     private SpoutCraftReduxClientInfo info() {
