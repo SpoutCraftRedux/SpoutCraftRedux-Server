@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.spoutcraftredux.api.SpoutCraftRedux;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
 import org.spoutcraftredux.api.asset.Asset;
+import org.spoutcraftredux.api.content.CustomItem;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientMissingEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxClientReadyEvent;
 import org.spoutcraftredux.api.event.SpoutCraftReduxKeyBindingEvent;
@@ -74,6 +75,14 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+        // One of each custom item
+        for (final Key id : List.of(TestPluginBootstrap.RUBY, TestPluginBootstrap.RUBY_WAND, TestPluginBootstrap.SNACK)) {
+            final CustomItem item = SpoutCraftRedux.content().item(id);
+            if (item != null && java.util.Arrays.stream(player.getInventory().getContents())
+                .noneMatch(stack -> stack != null && SpoutCraftRedux.content().item(stack) == item)) {
+                player.getInventory().addItem(SpoutCraftRedux.content().createStack(item, id.equals(TestPluginBootstrap.SNACK) ? 8 : 1));
+            }
+        }
         // A small HUD in the top left: a label over a mana-style bar
         player.spoutCraftRedux().hud().attach(
             new Label(Component.text("Mana", NamedTextColor.AQUA)).setGeometry(5, 5, 0, 0),

@@ -1,6 +1,7 @@
 name: SpoutCraftRedux-Test-Plugin
 version: ${version}
 main: org.spoutcraftredux.testplugin.TestPlugin
+bootstrapper: org.spoutcraftredux.testplugin.TestPluginBootstrap
 description: Logs SpoutCraft Redux handshake events
 author: SpoutCraft Redux
 api-version: ${apiversion}
