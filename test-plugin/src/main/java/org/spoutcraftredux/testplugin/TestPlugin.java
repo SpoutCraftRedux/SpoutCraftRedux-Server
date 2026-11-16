@@ -36,11 +36,13 @@ import org.spoutcraftredux.api.keybind.KeyBinding;
 public class TestPlugin extends JavaPlugin implements Listener {
 
     private Asset logo;
+    private ShopScreen.GoldButton gold;
 
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
         this.logo = SpoutCraftRedux.assets().registerImage(this, Key.key("spoutcraftredux_test", "logo"), "images/logo.png");
+        this.gold = new ShopScreen.GoldButton(this.image("gold_button"), this.image("gold_button_hover"), this.image("gold_button_disabled"));
         try {
             // Turns the diamond item into a red gem, for every player
             SpoutCraftRedux.assets().addResourcePack(this, "resourcepack");
@@ -49,6 +51,12 @@ public class TestPlugin extends JavaPlugin implements Listener {
         }
         SpoutCraftRedux.keyBindings().register(this, KeyBinding.of(
             Key.key("spoutcraftredux_test", "hello"), Component.text("Open the test screen"), "key.keyboard.h"));
+        SpoutCraftRedux.keyBindings().register(this, KeyBinding.of(
+            Key.key("spoutcraftredux_test", "shop"), Component.text("Open the shop"), "key.keyboard.j"));
+    }
+
+    private Asset image(final String name) {
+        return SpoutCraftRedux.assets().registerImage(this, Key.key("spoutcraftredux_test", name), "images/" + name + ".png");
     }
 
     @EventHandler
@@ -77,8 +85,17 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onKeyBinding(final SpoutCraftReduxKeyBindingEvent event) {
-        if (event.isPressed()) {
-            event.getPlayer().spoutCraftRedux().openScreen(this.testScreen());
+        if (!event.isPressed()) {
+            return;
+        }
+        final Player player = event.getPlayer();
+        if (event.getKeyBinding().id().value().equals("shop")) {
+            if (!player.getInventory().contains(Material.EMERALD)) {
+                player.getInventory().addItem(new ItemStack(Material.EMERALD, 32));
+            }
+            player.spoutCraftRedux().openScreen(new ShopScreen(player, this.gold).screen());
+        } else {
+            player.spoutCraftRedux().openScreen(this.testScreen());
         }
     }
 
