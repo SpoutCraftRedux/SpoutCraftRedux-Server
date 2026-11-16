@@ -81,19 +81,8 @@ public final class CraftContentRegistry implements ContentRegistry {
             final List<Content.Entry> entries = new ArrayList<>();
             for (final SpoutCraftReduxItem item : this.registeredItems.values()) {
                 final CustomItem definition = item.definition();
-                final Map<String, Object> properties = new LinkedHashMap<>();
+                final Map<String, Object> properties = new LinkedHashMap<>(SpoutCraftReduxItem.definition(definition));
                 properties.put(ContentKeys.NAME, Payloads.json(definition.name()));
-                properties.put(ContentKeys.MODEL, definition.model().asString());
-                properties.put(ContentKeys.MAX_STACK_SIZE, definition.maxStackSize());
-                properties.put(ContentKeys.MAX_DAMAGE, definition.maxDamage());
-                properties.put(ContentKeys.RARITY, definition.rarity().name().toLowerCase(java.util.Locale.ROOT));
-                properties.put(ContentKeys.FIRE_RESISTANT, definition.fireResistant());
-                final CustomItem.Food food = definition.food();
-                if (food != null) {
-                    properties.put(ContentKeys.NUTRITION, food.nutrition());
-                    properties.put(ContentKeys.SATURATION, food.saturation());
-                    properties.put(ContentKeys.CAN_ALWAYS_EAT, food.canAlwaysEat());
-                }
                 entries.add(new Content.Entry(ContentKeys.ITEM, definition.id().asString(), BuiltInRegistries.ITEM.getId(item), properties));
             }
             this.content = new Content(entries);

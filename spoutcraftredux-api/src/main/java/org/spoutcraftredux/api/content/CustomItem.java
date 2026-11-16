@@ -24,11 +24,15 @@ import org.jspecify.annotations.Nullable;
  * @param rarity       the rarity, which colours the name
  * @param fireResistant whether the dropped item survives fire and lava
  * @param food         food values, or null if it can't be eaten
+ * @param tool         tool or weapon settings, or null
+ * @param armor        armor settings, or null
+ * @param equipSlot    a slot the item can be worn in without being armor, such as a hat; null for none
  * @param onUse        called when a player uses the item in the air
  * @param onUseOnBlock called when a player uses the item on a block
  */
 public record CustomItem(Key id, Component name, Key model, int maxStackSize, int maxDamage, ItemRarity rarity,
-                         boolean fireResistant, @Nullable Food food, @Nullable UseHandler onUse,
+                         boolean fireResistant, @Nullable Food food, @Nullable Tool tool, @Nullable Armor armor,
+                         @Nullable EquipmentSlot equipSlot, @Nullable UseHandler onUse,
                          @Nullable UseOnBlockHandler onUseOnBlock) {
 
     public CustomItem {
@@ -44,6 +48,18 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
         }
         if (maxDamage > 0 && maxStackSize != 1) {
             throw new IllegalArgumentException("Damageable items stack to 1");
+        }
+        if (tool != null && armor != null) {
+            throw new IllegalArgumentException("An item can't be both a tool and armor");
+        }
+        if ((tool != null || armor != null) && maxStackSize != 1) {
+            throw new IllegalArgumentException("Tools and armor stack to 1");
+        }
+        if (armor != null && equipSlot != null) {
+            throw new IllegalArgumentException("Armor already has a slot");
+        }
+        if (equipSlot == EquipmentSlot.HAND || equipSlot == EquipmentSlot.OFF_HAND) {
+            throw new IllegalArgumentException("Items can't be worn in a hand slot");
         }
     }
 
@@ -70,6 +86,49 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
                 throw new IllegalArgumentException("Nutrition can't be negative");
             }
         }
+    }
+
+    /** Kinds of tool, each with the vanilla behaviour of that tool. */
+    public enum ToolType {
+        SWORD, PICKAXE, AXE, SHOVEL, HOE
+    }
+
+    /** Vanilla tool tiers: durability, mining speed and level, enchantability and repair items. */
+    public enum ToolMaterial {
+        WOOD, STONE, COPPER, IRON, DIAMOND, GOLD, NETHERITE
+    }
+
+    /** Vanilla armor materials: durability, defense, toughness, enchantability, sound, repair items and look. */
+    public enum ArmorMaterial {
+        LEATHER, COPPER, CHAINMAIL, IRON, GOLD, DIAMOND, TURTLE_SCUTE, NETHERITE
+    }
+
+    /** Armor pieces. */
+    public enum ArmorPiece {
+        HELMET, CHESTPLATE, LEGGINGS, BOOTS
+    }
+
+    /**
+     * Tool or weapon settings. The attack values are the same baselines vanilla uses for its own tools; a diamond
+     * sword is 3 and -2.4, a diamond pickaxe 1 and -2.8.
+     *
+     * @param type         the kind of tool
+     * @param material     the tier
+     * @param attackDamage attack damage added to the tier's bonus
+     * @param attackSpeed  attack speed modifier
+     */
+    public record Tool(ToolType type, ToolMaterial material, float attackDamage, float attackSpeed) {
+    }
+
+    /**
+     * Armor settings.
+     *
+     * @param material       the vanilla material for its stats
+     * @param piece          the piece
+     * @param equipmentAsset the worn look from the resource pack ({@code assets/<namespace>/equipment/<path>.json}),
+     *                       or null to look like the material
+     */
+    public record Armor(ArmorMaterial material, ArmorPiece piece, @Nullable Key equipmentAsset) {
     }
 
     /** Handles a player using the item in the air. */
@@ -112,6 +171,9 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
         private ItemRarity rarity = ItemRarity.COMMON;
         private boolean fireResistant;
         private @Nullable Food food;
+        private @Nullable Tool tool;
+        private @Nullable Armor armor;
+        private @Nullable EquipmentSlot equipSlot;
         private @Nullable UseHandler onUse;
         private @Nullable UseOnBlockHandler onUseOnBlock;
 
@@ -135,7 +197,8 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
         }
 
         /**
-         * Makes the item damageable, which also makes it stack to 1.
+         * Makes the item damageable, which also makes it stack to 1. Overrides the durability of a tool or armor
+         * material.
          *
          * @param maxDamage the durability
          * @return this builder
@@ -163,6 +226,57 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
             return this;
         }
 
+        /**
+         * Makes the item a tool or weapon, which also makes it stack to 1.
+         *
+         * @param type         the kind of tool
+         * @param material     the tier
+         * @param attackDamage attack damage baseline, as in {@link Tool}
+         * @param attackSpeed  attack speed baseline, as in {@link Tool}
+         * @return this builder
+         */
+        public Builder tool(final ToolType type, final ToolMaterial material, final float attackDamage, final float attackSpeed) {
+            this.tool = new Tool(type, material, attackDamage, attackSpeed);
+            this.maxStackSize = 1;
+            return this;
+        }
+
+        /**
+         * Makes the item armor that looks like its material when worn. It stacks to 1.
+         *
+         * @param material the material
+         * @param piece    the piece
+         * @return this builder
+         */
+        public Builder armor(final ArmorMaterial material, final ArmorPiece piece) {
+            return this.armor(material, piece, null);
+        }
+
+        /**
+         * Makes the item armor with its own worn look. It stacks to 1.
+         *
+         * @param material       the material for its stats
+         * @param piece          the piece
+         * @param equipmentAsset the worn look, as in {@link Armor}
+         * @return this builder
+         */
+        public Builder armor(final ArmorMaterial material, final ArmorPiece piece, final @Nullable Key equipmentAsset) {
+            this.armor = new Armor(material, piece, equipmentAsset);
+            this.maxStackSize = 1;
+            return this;
+        }
+
+        /**
+         * Lets players wear the item in a slot, like a carved pumpkin on the head.
+         *
+         * @param slot the slot
+         * @return this builder
+         */
+        public Builder equippable(final EquipmentSlot slot) {
+            this.equipSlot = slot;
+            return this;
+        }
+
         public Builder onUse(final UseHandler onUse) {
             this.onUse = onUse;
             return this;
@@ -176,7 +290,7 @@ public record CustomItem(Key id, Component name, Key model, int maxStackSize, in
         public CustomItem build() {
             return new CustomItem(this.id, this.name != null ? this.name : Component.text(this.id.value()),
                 this.model != null ? this.model : this.id, this.maxStackSize, this.maxDamage, this.rarity,
-                this.fireResistant, this.food, this.onUse, this.onUseOnBlock);
+                this.fireResistant, this.food, this.tool, this.armor, this.equipSlot, this.onUse, this.onUseOnBlock);
         }
     }
 }
