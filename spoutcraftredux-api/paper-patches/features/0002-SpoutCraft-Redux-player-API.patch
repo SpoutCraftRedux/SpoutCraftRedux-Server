@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 00:44:52 +0000
+Subject: [PATCH] SpoutCraft Redux player API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index a926963ce04f3ad411f908c91a9446ce0b5edd9a..74b4c9ede37b45bc398a0011f7a341bd4a51d535 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -4215,4 +4215,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+         sendDeathScreen(message);
+     }
+     // Purpur end
++
++    // SpoutCraft Redux start - SpoutCraft Redux player API
++    /**
++     * Gets the SpoutCraft Redux view of this player. Works for every player, modded or not.
++     *
++     * @return the SpoutCraft Redux view of this player
++     */
++    org.spoutcraftredux.api.SpoutCraftReduxPlayer spoutCraftRedux();
++    // SpoutCraft Redux end - SpoutCraft Redux player API
+ }
