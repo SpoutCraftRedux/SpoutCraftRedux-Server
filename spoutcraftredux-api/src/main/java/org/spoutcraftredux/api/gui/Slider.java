@@ -84,6 +84,9 @@ public final class Slider extends Widget<Slider> {
      */
     @ApiStatus.Internal
     public void handleSlide(final Player player, final float position) {
+        if (Float.isNaN(position)) {
+            return;
+        }
         this.position = Math.clamp(position, 0.0f, 1.0f);
         this.onChange.accept(player, this.position);
     }
