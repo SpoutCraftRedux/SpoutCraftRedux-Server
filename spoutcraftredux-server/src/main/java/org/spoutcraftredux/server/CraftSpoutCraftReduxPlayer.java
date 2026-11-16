@@ -9,19 +9,54 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.Nullable;
 import org.spoutcraftredux.api.MovementModifiers;
 import org.spoutcraftredux.api.SpoutCraftReduxPlayer;
+import org.spoutcraftredux.api.gui.Hud;
+import org.spoutcraftredux.api.gui.PopupScreen;
 import org.spoutcraftredux.protocol.Capabilities;
 import org.spoutcraftredux.protocol.message.Notification;
+import org.spoutcraftredux.server.gui.PlayerGui;
 import org.spoutcraftredux.server.network.Payloads;
 
 public final class CraftSpoutCraftReduxPlayer implements SpoutCraftReduxPlayer {
     private final CraftPlayer player;
     private final CraftMovementModifiers movement;
+    private final PlayerGui gui;
 
     public CraftSpoutCraftReduxPlayer(final CraftPlayer player) {
         this.player = player;
         this.movement = new CraftMovementModifiers(player);
+        this.gui = new PlayerGui(player);
+    }
+
+    /**
+     * Gets this player's HUD and popup state.
+     *
+     * @return the GUI state
+     */
+    public PlayerGui gui() {
+        return this.gui;
+    }
+
+    @Override
+    public Hud hud() {
+        return this.gui.hud();
+    }
+
+    @Override
+    public void openScreen(final PopupScreen screen) {
+        this.gui.openScreen(screen);
+    }
+
+    @Override
+    public @Nullable PopupScreen getOpenScreen() {
+        return this.gui.openScreen();
+    }
+
+    @Override
+    public void closeScreen() {
+        this.gui.closeScreen();
     }
 
     @Override

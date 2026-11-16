@@ -6,6 +6,9 @@ import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.Nullable;
+import org.spoutcraftredux.api.gui.Hud;
+import org.spoutcraftredux.api.gui.PopupScreen;
 
 /**
  * SpoutCraft Redux view of a player. Available for every player, modded or not.
@@ -65,6 +68,32 @@ public interface SpoutCraftReduxPlayer {
      * @return the movement multipliers
      */
     MovementModifiers movement();
+
+    /**
+     * Gets the widgets drawn over this player's game. Only players with the client see them.
+     *
+     * @return the player's HUD
+     */
+    Hud hud();
+
+    /**
+     * Opens a popup screen, replacing any screen opened before. Does nothing for players without the client.
+     *
+     * @param screen the screen
+     */
+    void openScreen(PopupScreen screen);
+
+    /**
+     * Gets the popup screen this player has open.
+     *
+     * @return the screen, or null if none is open
+     */
+    @Nullable PopupScreen getOpenScreen();
+
+    /**
+     * Closes the popup screen this player has open, if any.
+     */
+    void closeScreen();
 
     /**
      * Shows a notification popup for 7.5 seconds.

@@ -13,7 +13,7 @@ public final class SpoutCraftReduxServer {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final File CONFIG_FILE = new File("spoutcraftredux.yml");
     /** Features this server build implements; grows as phases land. */
-    public static final Set<String> SERVER_CAPABILITIES = Set.of(Capabilities.NOTIFICATION, Capabilities.KEYBIND);
+    public static final Set<String> SERVER_CAPABILITIES = Set.of(Capabilities.NOTIFICATION, Capabilities.KEYBIND, Capabilities.UI, Capabilities.HUD);
 
     private SpoutCraftReduxServer() {
     }
