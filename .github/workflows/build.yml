@@ -1,0 +1,35 @@
+name: Build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # The protocol repo is private, so fetch the pinned submodule commit with a read-only deploy key.
+      - name: Find the pinned protocol commit
+        id: protocol
+        run: echo "sha=$(git ls-tree HEAD protocol | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
+        with:
+          repository: SpoutCraftRedux/SpoutCraftRedux-Protocol
+          ref: ${{ steps.protocol.outputs.sha }}
+          path: protocol
+          ssh-key: ${{ secrets.PROTOCOL_DEPLOY_KEY }}
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Configure Git for patching
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Apply patches
+        run: ./gradlew applyAllPatches
+      - name: Build
+        run: ./gradlew build createPaperclipJar
+      - uses: actions/upload-artifact@v5
+        with:
+          name: spoutcraftredux-paperclip
+          path: spoutcraftredux-server/build/libs/*paperclip*.jar
