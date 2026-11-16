@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hexeption <minecraftfun201@gmail.com>
+Date: Mon, 16 Nov 2026 07:01:56 +0000
+Subject: [PATCH] SpoutCraft Redux custom content
+
+
+diff --git a/net/minecraft/core/registries/BuiltInRegistries.java b/net/minecraft/core/registries/BuiltInRegistries.java
+index 57df5c2b1bb7ad6b7b001a514a5f59aa3007f159..fb0d35cd86e121beff6a87f1b7590bf510021c10 100644
+--- a/net/minecraft/core/registries/BuiltInRegistries.java
++++ b/net/minecraft/core/registries/BuiltInRegistries.java
+@@ -415,6 +415,7 @@ public class BuiltInRegistries {
+         REGISTRY.freeze(); // Paper - freeze main registry early
+         createContents();
+         runnable.run(); // Paper
++        org.spoutcraftredux.server.content.CraftContentRegistry.get().registerAll(); // SpoutCraft Redux - Custom content
+         freeze();
+         validate(REGISTRY);
+     }
+diff --git a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
+index 1c69471192af60ef5dfb8ea8abc2d063966c2961..7cd7d9bdb3b426f5f1b47d614ddd30f30ae5f4f0 100644
+--- a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
+@@ -121,6 +121,7 @@ public class ServerConfigurationPacketListenerImpl extends ServerCommonPacketLis
+         this.synchronizeRegistriesTask = new SynchronizeRegistriesTask(knownPacks, registries);
+         this.configurationTasks.add(this.synchronizeRegistriesTask);
+         this.configurationTasks.add(new org.spoutcraftredux.server.handshake.HandshakeTask(this)); // SpoutCraft Redux - Handshake
++        this.configurationTasks.add(new org.spoutcraftredux.server.content.ContentTask(this)); // SpoutCraft Redux - Custom content
+         this.addOptionalTasks();
+         this.configurationTasks.add(new io.papermc.paper.connection.PaperConfigurationTask(this)); // Paper
+         this.returnToWorld();
+@@ -291,6 +292,11 @@ public class ServerConfigurationPacketListenerImpl extends ServerCommonPacketLis
+             if (org.spoutcraftredux.server.handshake.HandshakeTask.handlePayload(this, payload)) {
+                 return;
+             }
++            // SpoutCraft Redux start - Custom content
++            if (org.spoutcraftredux.server.content.ContentTask.handlePayload(this, payload)) {
++                return;
++            }
++            // SpoutCraft Redux end - Custom content
+         }
+         // SpoutCraft Redux end - Handshake
+         super.handleCustomPayload(packet);
