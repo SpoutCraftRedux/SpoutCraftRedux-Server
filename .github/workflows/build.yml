@@ -41,7 +41,7 @@ jobs:
         run: |
           jar=$(ls spoutcraftredux-server/build/libs/*paperclip*.jar | grep -v -E -- '-(sources|javadoc|dev)\.jar$' | head -n1)
           commits=$(echo "$COMMITS" | jq -c '[.[] | {author: .author.name, email: .author.email, description: .message, hash: .id, timestamp: .timestamp}]')
-          curl -fsS -X POST "https://api.spoutcraftredux.org/v2/spoutcraftredux/26.3" \
+          curl -fsS -X POST "https://api.spoutcraftredux.org/v2/spoutcraftredux-server/26.3" \
             -H "Authorization: Bearer $TOKEN" \
             -F "file=@$jar" \
             -F "build=${{ github.run_number }}" \

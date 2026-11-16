@@ -36,7 +36,7 @@ The server jar ends up in `spoutcraftredux-server/build/libs/`. Local builds are
 `.github/workflows/build.yml` builds every push and pull request. A push to `main` also:
 
 - publishes `spoutcraftredux-api` to https://repo.spoutcraftredux.org/snapshots as `26.3.build.<run number>-stable`
-- uploads the paperclip jar to https://api.spoutcraftredux.org as build `<run number>` of project `spoutcraftredux`, version `26.3`
+- uploads the paperclip jar to https://api.spoutcraftredux.org as build `<run number>` of project `spoutcraftredux-server`, version `26.3`
 
 The workflow uses these repository secrets:
 
