@@ -98,7 +98,7 @@ public interface SpoutCraftReduxPlayer {
     /**
      * Shows a notification popup for 7.5 seconds.
      * <p>
-     * Players without the SpoutCraft Redux client see the title and message in the action bar instead.
+     * Does nothing for players without the SpoutCraft Redux client.
      *
      * @param title   the title, at most 26 visible characters
      * @param message the message, at most 26 visible characters
@@ -111,7 +111,7 @@ public interface SpoutCraftReduxPlayer {
     /**
      * Shows a notification popup.
      * <p>
-     * Players without the SpoutCraft Redux client see the title and message in the action bar instead.
+     * Does nothing for players without the SpoutCraft Redux client.
      *
      * @param title   the title, at most 26 visible characters
      * @param message the message, at most 26 visible characters

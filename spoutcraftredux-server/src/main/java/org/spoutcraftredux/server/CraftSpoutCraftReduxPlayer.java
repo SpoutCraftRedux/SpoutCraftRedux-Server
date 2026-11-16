@@ -117,8 +117,6 @@ public final class CraftSpoutCraftReduxPlayer implements SpoutCraftReduxPlayer {
             final Notification notification = new Notification(
                 Payloads.json(title), Payloads.json(message), icon.getType().getKey().asString(), millis);
             Payloads.send(this.player.getHandle(), Notification.CHANNEL, notification.encode());
-        } else {
-            this.player.sendActionBar(Component.textOfChildren(title, Component.space(), message));
         }
     }
 
